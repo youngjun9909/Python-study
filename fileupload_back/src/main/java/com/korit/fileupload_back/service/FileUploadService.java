@@ -12,18 +12,25 @@ import java.util.UUID;
 
 @Service
 public class FileUploadService {
-    public void uploadFile(MultipartFile file) throws IOException {
-        if(file == null) {return;}
+    public String uploadFile(MultipartFile file) throws IOException {
+        if(file == null) {return null;}
 
         String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
         String rootPath = "C:/python/upload/";
+        String filePath = "profile/" + newFileName;
 
         File f = new File(rootPath, "profile");
 
         if(!f.exists()){f.mkdirs();}
 
-        Path uploadPath = Paths.get(rootPath + "profile/" + newFileName);
-        Files.write(uploadPath, file.getBytes());
+        Path uploadPath = Paths.get(rootPath + filePath);
+        try{
+            Files.write(uploadPath, file.getBytes());
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filePath;
     }
 }
